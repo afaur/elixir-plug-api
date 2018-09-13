@@ -1,19 +1,21 @@
-.PHONY: run, build, test
+.PHONY: ci, deps, build, run, test
+
+LAB = cd .lab
 
 default: build
 
 ci:
-	@cd .lab && mix local.rebar --force
-	@cd .lab && mix local.hex --force
+	@${LAB} && mix local.rebar --force
+	@${LAB} && mix local.hex --force
 
 deps:
-	@cd .lab && mix deps.get
+	@${LAB} && mix deps.get
 
 build:
-	@cd .lab && mix
+	@${LAB} && mix
 
 run:
-	@cd .lab && iex -S mix run --no-halt
+	@${LAB} && iex -S mix run --no-halt
 
 test:
-	@cd .lab && mix test
+	@${LAB} && mix test

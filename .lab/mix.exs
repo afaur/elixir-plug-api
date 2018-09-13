@@ -20,10 +20,10 @@ defmodule HttpApp.MixProject do
 
   defp deps do
     [
-      { :cowboy, "~> 2.0"                                  },
-      { :plug,   github: "elixir-plug/plug", tag: "v1.6.2" },
-      { :poison, github: "devinus/poison",   tag: "4.0.1"  },
-      { :httpoison, "~> 1.0"                               },
+      { :cowboy,    "~> 2.0" },
+      { :plug,      "~> 1.6" },
+      { :poison,    "~> 4.0" },
+      { :httpoison, "~> 1.0" },
     ]
   end
 end
