@@ -60,6 +60,10 @@
   - `make deps`
     - See code in `conf/mix.exs`
 
+## Configure Project
+  - `make config`
+    - See code in `makefile || justfile` && `conf/*`
+
 ## Build Project
   - `make build`
     - See code in `conf/*.exs`
