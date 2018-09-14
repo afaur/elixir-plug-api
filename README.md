@@ -18,6 +18,8 @@
       - Goal is to minimize dep reliance as much as possible
   - See [with_new_relic_agent](https://github.com/afaur/elixir-plug-api/tree/with_new_relic_agent)
     branch for an example of new relic monitoring.
+  - See [with_new_relic_agent_and_env_config](https://github.com/afaur/elixir-plug-api/tree/with_new_relic_agent_and_env_config)
+    branch for a combination of these features with the addition of the new relic agent
 
 ## Organization
   - Uses a `.lab` folder, a `Makefile`, and a `Justfile`
@@ -62,7 +64,11 @@
 
 ## Configure Project
   - `make config`
-    - See code in `makefile || justfile` && `conf/*`
+    - See code in
+      - `makefile || justfile`
+      - `conf/.env_sample`
+      - `conf/config.exs`
+      - `.lab/bin/config`
 
 ## Build Project
   - `make build`
