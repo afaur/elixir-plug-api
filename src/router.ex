@@ -3,6 +3,8 @@ defmodule HttpApp.Router do
   use Plug.ErrorHandler
   use Plug.Debugger
 
+  use NewRelic.Transaction
+
   require Logger
   plug(Plug.Logger, log: :debug)
 
