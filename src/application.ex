@@ -4,7 +4,7 @@ defmodule HttpApp.Application do
   require Logger
 
   def start(_type, _args) do
-    port = Application.get_env(:app, :http_port, 8080)
+    port = Application.get_env(:app, :port, 8080)
 
     children = [
       Plug.Adapters.Cowboy2.child_spec(

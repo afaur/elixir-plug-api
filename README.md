@@ -16,8 +16,12 @@
       - Uses binaries instead of string lists
     - These deps do have [sub deps](https://github.com/afaur/elixir-plug-api/blob/master/.lab/mix.lock)
       - Goal is to minimize dep reliance as much as possible
+  - See [with_env_config](https://github.com/afaur/elixir-plug-api/tree/with_env_config)
+    branch which adds a `make config` task for creating `.env` from a `.env_sample`.
   - See [with_new_relic_agent](https://github.com/afaur/elixir-plug-api/tree/with_new_relic_agent)
     branch for an example of new relic monitoring.
+  - See [with_new_relic_agent_and_env_config](https://github.com/afaur/elixir-plug-api/tree/with_new_relic_agent_and_env_config)
+    branch for an example that combines the two individual branches together.
 
 ## Organization
   - Uses a `.lab` folder, a `Makefile`, and a `Justfile`

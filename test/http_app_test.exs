@@ -2,9 +2,13 @@ defmodule HttpAppTest do
   use ExUnit.Case
   doctest HttpApp.Application
 
-  test "/api/users should return list of users" do
+  setup_all do
+    {:ok, [port: Application.get_env(:app, :port)]}
+  end
+
+  test "/api/users should return list of users", context do
     assert (
-      "http://127.0.0.1:8085/api/users"
+      "http://127.0.0.1:#{context[:port]}/api/users"
         |> HTTPoison.get()
         |> response()
     ) == { :ok, Poison.encode!( [ "Mary", "John", "Jill" ] ) }
