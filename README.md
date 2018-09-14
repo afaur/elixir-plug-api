@@ -16,8 +16,8 @@
       - Uses binaries instead of string lists
     - These deps do have [sub deps](https://github.com/afaur/elixir-plug-api/blob/master/.lab/mix.lock)
       - Goal is to minimize dep reliance as much as possible
-  - See [with_new_relic_agent](https://github.com/afaur/elixir-plug-api/tree/with_new_relic_agent)
-    branch for an example of new relic monitoring.
+    - This branch adds the new relic agent as an additional dependency
+      - Follow this [guide to configure it](https://github.com/newrelic/elixir_agent#via-application-config)
 
 ## Organization
   - Uses a `.lab` folder, a `Makefile`, and a `Justfile`
