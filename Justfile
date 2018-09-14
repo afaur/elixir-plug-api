@@ -10,7 +10,6 @@ ci:
 	@${LAB_DIR} && mix local.rebar --force
 	@${LAB_DIR} && mix local.hex --force
 	@${LAB_DIR} && cp ${CONF_DIR}/${ENV_FILE}_sample ${CONF_DIR}/${ENV_FILE}
-	@${LAB_DIR} && sed -i -e "s/_CF_PORT/8085/" ${CONF_DIR}/${ENV_FILE}
 
 config:
 	@${LAB_DIR} && ${BIN_DIR}/config
