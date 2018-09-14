@@ -20,10 +20,11 @@ defmodule HttpApp.MixProject do
 
   defp deps do
     [
-      { :cowboy,    "~> 2.0" },
-      { :plug,      "~> 1.6" },
-      { :poison,    "~> 4.0" },
-      { :httpoison, "~> 1.0" },
+      { :cowboy,          "~> 2.0" },
+      { :plug,            "~> 1.6" },
+      { :poison,          "~> 4.0" },
+      { :httpoison,       "~> 1.0" },
+      { :new_relic_agent, "~> 1.0" },
     ]
   end
 end

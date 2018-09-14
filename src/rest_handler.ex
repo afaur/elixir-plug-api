@@ -2,6 +2,8 @@ defmodule HttpApp.RestHandler do
   use Plug.Router
   use Plug.ErrorHandler
 
+  use NewRelic.Transaction
+
   plug(:match)
   plug(:dispatch)
 
