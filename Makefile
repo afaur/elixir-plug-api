@@ -1,51 +1,30 @@
-.PHONY: maybeMakeEnv, maybeConfEnv, config, ci, deps, build, run, test
+.PHONY: config, ci, deps, build, run, test
 
-ifeq ($(shell uname),Darwin)
-SED = /usr/bin/sed -i '' -e
-else
-SED = sed -i -e
-endif
-
-actualEnv = ./conf/.env
-sampleEnv = "${actualEnv}_sample"
-
-ConfEnvReq = $(shell grep -ic -e "_CF_PORT" ${actualEnv})
-
-CFSetText  = Enter your Server
-CFPortNum  = printf "${CFSetText} Port Number: "
-CFSetPort  = read CFV && ${SED} "s/_CF_PORT/$$CFV/" ${actualEnv}
-CFReadPort = (${CFPortNum} && ${CFSetPort})
-
-LAB = cd .lab
+LAB_DIR  = cd .lab
+BIN_DIR  = ./bin
+CONF_DIR = ../conf
+ENV_FILE = .env
+SET_ENV  = . ${CONF_DIR}/${ENV_FILE}
 
 default: build
 
 ci:
-	@${LAB} && mix local.rebar --force
-	@${LAB} && mix local.hex --force
-	@cp ${sampleEnv} ${actualEnv}
-	@${SED} "s/_CF_PORT/8085/" ${actualEnv}
-
-maybeMakeEnv:
-	@[[ -f ${actualEnv} ]] || (cp ${sampleEnv} ${actualEnv})
-
-maybeConfEnv:
-	@[[ ${ConfEnvReq} -gt 0 ]] || (echo "Error: Env Already configured" && exit 1)
+	@${LAB_DIR} && mix local.rebar --force
+	@${LAB_DIR} && mix local.hex --force
+	@${LAB_DIR} && cp ${CONF_DIR}/${ENV_FILE}_sample ${CONF_DIR}/${ENV_FILE}
+	@${LAB_DIR} && sed -i -e "s/_CF_PORT/8085/" ${CONF_DIR}/${ENV_FILE}
 
 config:
-	@make maybeMakeEnv
-	@make maybeConfEnv
-	@${CFReadPort}
-	@echo "Settings saved to ${actualEnv}"
+	@${LAB_DIR} && ${BIN_DIR}/config
 
 deps:
-	@${LAB} && mix deps.get
+	@${LAB_DIR} && mix deps.get
 
 build:
-	@${LAB} && . "../${actualEnv}" && mix
+	@${LAB_DIR} && ${SET_ENV} && mix
 
 run:
-	@${LAB} && . "../${actualEnv}" && iex -S mix run --no-halt
+	@${LAB_DIR} && ${SET_ENV} && iex -S mix run --no-halt
 
 test:
-	@${LAB} && . "../${actualEnv}" && mix test
+	@${LAB_DIR} && ${SET_ENV} && mix test

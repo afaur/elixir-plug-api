@@ -1,0 +1,47 @@
+#!/usr/bin/env elixir
+
+defmodule Config do
+  defp env_to_capital_words(word) do
+    word
+      |> String.split("_")
+      |> Enum.map(fn word -> word |> String.capitalize end)
+      |> Enum.join(" ")
+  end
+
+  defp full_path(file) do
+    [__DIR__, "..", "..", "conf", file] |> Path.join
+  end
+
+  defp ask_for_value([_, env_key]) do
+    value = "Enter value for #{env_to_capital_words(env_key)}: "
+      |> IO.gets
+      |> String.trim
+    {env_key, value}
+  end
+
+  defp fill_sample_values(file) do
+    with {:ok, fpid} =  File.open(full_path(file), [:read]),
+         content     =  IO.read(fpid, :all),
+         :ok         =  File.close(fpid),
+         env_keys    <- Regex.scan(~r/export\s(.+)=/, content)
+    do
+      env_keys |> Enum.map(&ask_for_value/1)
+    end
+  end
+
+  defp tuple_to_config({key, value}) do
+    "export #{key}='#{value}'\n"
+  end
+
+  defp write_env_file(file, values) do
+    {:ok, fpid} = File.open(full_path(file), [:write])
+    IO.write(fpid, values |> Enum.map(&tuple_to_config/1))
+    :ok = File.close(fpid)
+  end
+
+  def env() do
+    write_env_file(".env", fill_sample_values(".env_sample"))
+  end
+end
+
+Config.env()
