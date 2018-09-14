@@ -16,6 +16,12 @@
       - Uses binaries instead of string lists
     - These deps do have [sub deps](https://github.com/afaur/elixir-plug-api/blob/master/.lab/mix.lock)
       - Goal is to minimize dep reliance as much as possible
+    - This branch adds the new relic agent as an additional dependency
+      - This branch adds the `make config` task to ease configuration
+      - When running `make config` you will be asked for
+        - The server port to use
+        - The new relic application name
+        - The new relic application license
 
 ## Organization
   - Uses a `.lab` folder, a `Makefile`, and a `Justfile`
