@@ -1,47 +1,52 @@
 #!/usr/bin/env elixir
 
 defmodule Config do
-  defp env_to_capital_words(word) do
-    word
-      |> String.split("_")
-      |> Enum.map(fn word -> word |> String.capitalize end)
-      |> Enum.join(" ")
-  end
+  defp split_key(env_key),      do: String.split env_key, "_"
+  defp cap_word(word),          do: String.capitalize word
 
-  defp full_path(file) do
-    [__DIR__, "..", "..", "conf", file] |> Path.join
-  end
+  defp cap_words(env_key),      do: Enum.map split_key(env_key), &(cap_word(&1))
+  defp cap_key(env_key),        do: Enum.join cap_words(env_key), " "
 
-  defp ask_for_value([_, env_key]) do
-    value = "Enter value for #{env_to_capital_words(env_key)}: "
-      |> IO.gets
-      |> String.trim
-    {env_key, value}
-  end
+  defp pre_path,                do: [__DIR__, "..", "..", "conf"]
+  defp full_path(file),         do: Path.join (pre_path() ++ [file])
 
-  defp fill_sample_values(file) do
-    with {:ok, fpid} =  File.open(full_path(file), [:read]),
-         content     =  IO.read(fpid, :all),
-         :ok         =  File.close(fpid),
-         env_keys    <- Regex.scan(~r/export\s(.+)=/, content)
+  defp prefix,                  do: "Enter value for"
+  defp prompt(env_key),         do: IO.gets "#{prefix()} #{cap_key(env_key)}: "
+
+  defp ask_for_value(env_key),  do: String.trim prompt(env_key)
+  defp get_value([_, env_key]), do: {env_key, ask_for_value(env_key)}
+
+  defp sample_vals() do
+    with {:ok, fp} <- File.open(full_path(".env_sample"), [:read]),
+         content   <- IO.read(fp, :all),
+         :ok       <- File.close(fp),
+         env_keys  <- Regex.scan(~r/export\s(.+)=/, content)
     do
-      env_keys |> Enum.map(&ask_for_value/1)
+      {:ok, Enum.map(env_keys, &get_value/1)}
+    else
+      _ -> {:err, "Error reading from ./conf/.env_sample"}
     end
   end
 
-  defp tuple_to_config({key, value}) do
-    "export #{key}='#{value}'\n"
-  end
+  defp tupl_to_conf({key, val}), do: "export #{key}='#{val}'\n"
+  defp vals_to_conf(vals),       do: Enum.map(vals, &tupl_to_conf/1)
 
-  defp write_env_file(file, values) do
-    {:ok, fpid} = File.open(full_path(file), [:write])
-    IO.write(fpid, values |> Enum.map(&tuple_to_config/1))
-    :ok = File.close(fpid)
-  end
+  defp read_sample({:err, msg}), do: IO.puts msg; :err
+  defp read_sample({:ok, vals}), do: {:ok, vals_to_conf(vals)}
 
-  def env() do
-    write_env_file(".env", fill_sample_values(".env_sample"))
+  defp read_sample_vals(),       do: read_sample sample_vals()
+
+  def write_env() do
+    with {:ok, fp}   <- File.open(full_path(".env"), [:write]),
+         {:ok, vals} <- read_sample_vals(),
+         :ok         <- IO.write(fp, vals),
+         :ok         <- File.close(fp)
+    do
+      IO.puts "Config written to ./conf/.env"
+    else
+      _ -> IO.puts "Error writing to ./conf/.env"
+    end
   end
 end
 
-Config.env()
+Config.write_env()
