@@ -1,6 +1,17 @@
 use Mix.Config
 
-alias HttpApp.Router, as: Router
+scheme = :http
+port   = 8085
 
-config :app, port: 8085
-config :app, Router, server: true
+if (scheme == :https) do
+  config :app, plug_options: [
+    password: "cowboy",
+    keyfile:  Path.expand("../../conf/ssl/server.key", __DIR__),
+    certfile: Path.expand("../../conf/ssl/server.cer", __DIR__),
+    port:     port,
+  ]
+else
+  config :app, plug_options: [ port: port ]
+end
+
+config :app, plug_scheme: scheme
