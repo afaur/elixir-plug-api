@@ -17,7 +17,9 @@
     - These deps do have [sub deps](https://github.com/afaur/elixir-plug-api/blob/master/.lab/mix.lock)
       - Goal is to minimize dep reliance as much as possible
     - This branch adds the new relic agent as an additional dependency
-      - Follow this [guide to configure it](https://github.com/newrelic/elixir_agent#via-application-config)
+      - Copy your settings in to the file at `./conf/private_sample.exs`
+      - Rename `./conf/private_sample.exs` to `./conf/private.exs`
+      - For more information look at this [guide](https://github.com/newrelic/elixir_agent#via-application-config)
 
 ## Organization
   - Uses a `.lab` folder, a `Makefile`, and a `Justfile`

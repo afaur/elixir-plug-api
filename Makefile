@@ -1,21 +1,25 @@
 .PHONY: ci, deps, build, run, test
 
-LAB = cd .lab
+LAB_DIR          = cd .lab
+CONF_DIR         = ../conf
+PRIV_SAMPLE_FILE = private_sample.exs
+PRIV_FILE        = private.exs
 
 default: build
 
 ci:
-	@${LAB} && mix local.rebar --force
-	@${LAB} && mix local.hex --force
+	@${LAB_DIR} && cp ${CONF_DIR}/${PRIV_SAMPLE_FILE} ${CONF_DIR}/${PRIV_FILE}
+	@${LAB_DIR} && mix local.rebar --force
+	@${LAB_DIR} && mix local.hex --force
 
 deps:
-	@${LAB} && mix deps.get
+	@${LAB_DIR} && mix deps.get
 
 build:
-	@${LAB} && mix
+	@${LAB_DIR} && mix
 
 run:
-	@${LAB} && iex -S mix run --no-halt
+	@${LAB_DIR} && iex -S mix run --no-halt
 
 test:
-	@${LAB} && mix test
+	@${LAB_DIR} && mix test

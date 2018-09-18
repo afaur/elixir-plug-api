@@ -1,7 +1,5 @@
 defmodule HttpApp.RestHandler do
-  use HttpApp.BaseRouter
-
-  use NewRelic.Transaction
+  use HttpApp.BaseRouter, first_handler: false
 
   defp content(),      do: ["Mary", "John", "Jill"]
   defp json(content),  do: Poison.encode! content, pretty: true
@@ -16,5 +14,5 @@ defmodule HttpApp.RestHandler do
   get   "/users", do: api_resp conn
 
   _ = "Any non matching `/api` routes should say they are not implemented"
-  match        _, do: send_resp conn, 501, "API Request Not Implemented"
+  match        _, do: send_not_impl conn
 end

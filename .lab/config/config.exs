@@ -15,3 +15,5 @@ else
 end
 
 config :app, plug_scheme: scheme
+
+import_config Path.expand("../../conf/private.exs", __DIR__)
