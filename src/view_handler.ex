@@ -6,5 +6,7 @@ defmodule HttpApp.ViewHandler do
     - argument is what `dynamic_value` will be set as
       when we render the compiled template from `www/index.eex`
   """
-  EEx.function_from_file :def, :index, "../www/index.eex", [ :dynamic_value ]
+  EEx.function_from_file :def,   :index, "../www/index.eex", [ :dynamic_value ]
+
+  EEx.function_from_file :def, :missing, "../www/404.eex", [ :route ]
 end
